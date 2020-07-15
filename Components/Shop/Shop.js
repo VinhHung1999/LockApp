@@ -9,6 +9,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 export default class Shop extends Component {
+    _isMounted = false;
     constructor(props){
         super(props);
         this.state = {
@@ -25,6 +26,13 @@ export default class Shop extends Component {
                 <Product navigation={this.props.navigation}/>
             </View>
         );
+    }
+    componentDidMount() {
+        this._isMounted = true;
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 }
 

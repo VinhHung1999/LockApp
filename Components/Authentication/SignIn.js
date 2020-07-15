@@ -104,7 +104,7 @@ export default class SignIn extends Component{
     SignInClick(){
         firebaseApp.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
         .then(()=>{
-            this.props.navigation.navigate('Home') 
+            this.props.navigation.navigate('Main');
             this.setState({
                 email: '',
                 password: ''

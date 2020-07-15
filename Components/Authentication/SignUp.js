@@ -166,11 +166,11 @@ export default class SignUp extends Component{
                     text: 'Cancel',
                     onPress: () => console.log('Cancel Pressed'),
                     style: 'cancel'
-                  },
-                  { text: 'OK', onPress: () => console.log('OK Pressed') }
+                },
+                { text: 'OK', onPress: () => console.log('OK Pressed') }
                 ],
                 { cancelable: false }
-              );
+            );
         });
     }
     

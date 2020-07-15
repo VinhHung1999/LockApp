@@ -11,8 +11,6 @@ import global from '../../global.js';
 
 
 export default class Cart extends Component {
-    
-
     constructor(props){
         super(props);
         this.state = {
@@ -27,7 +25,6 @@ export default class Cart extends Component {
 
     // Load new Data to cart
     loadNewData(){
-
         this.setState({
             refreshing:true,
             

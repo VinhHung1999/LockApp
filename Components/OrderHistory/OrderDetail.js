@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     title:{
-        fontSize: 25,
+        fontSize: 20,
         color: 'white'
     },
     totalPrice: {

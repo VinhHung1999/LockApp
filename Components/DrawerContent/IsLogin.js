@@ -64,7 +64,7 @@ export function IsLogin(props){
                                     />
                                 )}
                                 label = "Home"
-                                onPress = {() => {props.navigation.navigate("Home")}}
+                                onPress = {() => {props.navigation.navigate("Main")}}
                             />
                             <DrawerItem 
                                 icon= {({color,size})=>(

@@ -39,14 +39,11 @@ StatusBar.setHidden(true);
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
 const ProductStack = createStackNavigator();
 const CartStack = createStackNavigator();
 const SearchStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const OrderStack = createStackNavigator();
-
-
 
 
 export default class Index extends Component {
@@ -62,29 +59,71 @@ export default class Index extends Component {
         global.cartGlobal = this.state.cartArray;
     }
 
+    Home() {
+        return (
+            <Tab.Navigator
+            screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, color, size }) => {
+                let iconName;
+                if (route.name === 'Shop') {
+                    iconName = focused
+                    ? 'ios-home'
+                    : 'ios-home';
+                } else if (route.name === 'Cart') {
+                    return (
+                        <CartIconWithBadge
+                        name={
+                            focused
+                            ? 'md-cart'
+                            : 'md-cart'
+                        }
+                        size={size}
+                        color={color}
+                        />
+                    );
+                } else if (route.name === 'Search') {
+                    iconName = focused ? 'md-search' : 'md-search';
+                } else if (route.name === 'Contact') {
+                    iconName = focused ? 'md-contacts' : 'md-contacts';
+                }
+                  // You can return any component that you like here!
+                return <Ionicons name={iconName} size={size} color={color} />;
+                },
+            })}
+            tabBarOptions={{
+                activeTintColor: '#2BD9C8',
+                inactiveTintColor: '#AFAEAF',
+            }}
+            >
+                <Tab.Screen name="Shop" component={createProductStack} />
+                <Tab.Screen name="Cart" component={createCartStack} />
+                <Tab.Screen name="Search" component={createSearchStack} />
+                <Tab.Screen name="Contact" component={ContactScreen} />
+            </Tab.Navigator>
+        );
+    
+    }
+    
     render() {
-        
         return (
             <NavigationContainer>
                 { this.state.isSingedIn ? (
                     <Drawer.Navigator initialRouteName="Main" drawerContent = { props => <IsLogin { ... props} />}>
-                        <Drawer.Screen name="Main" component={createHomeStack} />
+                        <Drawer.Screen name="Main" component={this.Home} />
                         <Drawer.Screen name="Profile" component={Profile} />
                         <Drawer.Screen name="Order" component={createOrderStack} />
                 </Drawer.Navigator>
                 ) : (
                     <Drawer.Navigator initialRouteName="Main" drawerContent = { props => <NotLogin { ... props} />}>
-                        <Drawer.Screen name="Main" component={createHomeStack} />
-                        <Drawer.Screen name="SignInDrawer" component={SignInScreen} />
-                        <Drawer.Screen name="SignUpDrawer" component={SignUpScreen} />
+                        <Drawer.Screen name="Main" component={this.Home} />
+                        <Drawer.Screen name="SignIn" component={SignInScreen} />
+                        <Drawer.Screen name="SignUp" component={SignUpScreen} />
                 </Drawer.Navigator>
                 )}
                 
             </NavigationContainer>
         );
     }
-
-
     componentDidMount(){
         this._isMounted = true;
         firebaseApp.auth().onAuthStateChanged(user => {
@@ -146,23 +185,86 @@ export default class Index extends Component {
 
 }
 
-function createHomeStack() {
-    return(
-        <Stack.Navigator initialRouteName="Main">
-            <Stack.Screen 
-                name="Home" 
-                component={Home} 
-                options={{ title: 'Home', headerShown: false, header: null}} 
-                initialParams={{ login: false }}
-            />
-            <Stack.Screen name="Authentication" component={AuthenticationScreen} options={{ headerShown: false, header: null}} />
-            {/* <Stack.Screen name="OrderHistory" component={OrderHistoryScreen} options={{ headerShown: false, header: null}} />
-            <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false, header: null}} /> */}
-            <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false, header: null}} />
-            <Stack.Screen name="SignIn" component={SignInScreen} options={{ headerShown: false, header: null}} />
-            <Stack.Screen name="Detail" component={DetailScreen} options={{ headerShown: false, header: null}} />
-        </Stack.Navigator>
-    )
+// Badge to Icon
+
+function IconWithBadge({ name, badgeCount, color, size }) {
+    return (
+        <View style={{ width: 24, height: 24, margin: 5 }}>
+        <Ionicons name={name} size={size} color={color} />
+        {badgeCount > 0 && (
+            <View
+            style={{
+                // On React Native < 0.57 overflow outside of parent will not work on Android, see https://git.io/fhLJ8
+                position: 'absolute',
+                right: -6,
+                top: -3,
+                backgroundColor: '#2BD9C8',
+                borderRadius: 6,
+                width: 12,
+                height: 12,
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}
+            >
+            <Text style={{ color: 'white', fontSize: 10, fontWeight: 'bold' }}>
+                {badgeCount}
+            </Text>
+            </View>
+        )}
+        </View>
+    );
+}
+
+function CartIconWithBadge(props) {
+// You should pass down the badgeCount in some other ways like React Context API, Redux, MobX or event emitters.
+return <IconWithBadge {...props} badgeCount={global.cartGlobal.length}/>;
+}
+
+
+// Stack Navigator
+function Home() {
+    return (
+        <Tab.Navigator
+        screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+            if (route.name === 'Shop') {
+                iconName = focused
+                ? 'ios-home'
+                : 'ios-home';
+            } else if (route.name === 'Cart') {
+                return (
+                    <CartIconWithBadge
+                    name={
+                        focused
+                        ? 'md-cart'
+                        : 'md-cart'
+                    }
+                    size={size}
+                    color={color}
+                    />
+                );
+            } else if (route.name === 'Search') {
+                iconName = focused ? 'md-search' : 'md-search';
+            } else if (route.name === 'Contact') {
+                iconName = focused ? 'md-contacts' : 'md-contacts';
+            }
+              // You can return any component that you like here!
+            return <Ionicons name={iconName} size={size} color={color} />;
+            },
+        })}
+        tabBarOptions={{
+            activeTintColor: '#2BD9C8',
+            inactiveTintColor: '#AFAEAF',
+        }}
+        >
+            <Tab.Screen name="Shop" component={createProductStack} />
+            <Tab.Screen name="Cart" component={createCartStack} />
+            <Tab.Screen name="Search" component={createSearchStack} />
+            <Tab.Screen name="Contact" component={ContactScreen} />
+        </Tab.Navigator>
+    );
+
 }
 
 function createOrderStack() {
@@ -219,6 +321,12 @@ function createSearchStack(){
     
 } 
 
+
+
+
+
+// Screen
+
 function Profile({navigation}){
     return(
         <ProfileStack.Navigator>
@@ -230,88 +338,6 @@ function Profile({navigation}){
         </ProfileStack.Navigator>
     )
 }
-
-
-function Home({ navigation }) {
-    return (
-        <Tab.Navigator
-        screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-            if (route.name === 'Shop') {
-                iconName = focused
-                ? 'ios-home'
-                : 'ios-home';
-            } else if (route.name === 'Cart') {
-                return (
-                    <CartIconWithBadge
-                    name={
-                        focused
-                        ? 'md-cart'
-                        : 'md-cart'
-                    }
-                    size={size}
-                    color={color}
-                    />
-                );
-            } else if (route.name === 'Search') {
-                iconName = focused ? 'md-search' : 'md-search';
-            } else if (route.name === 'Contact') {
-                iconName = focused ? 'md-contacts' : 'md-contacts';
-            }
-              // You can return any component that you like here!
-            return <Ionicons name={iconName} size={size} color={color} />;
-            },
-        })}
-        tabBarOptions={{
-            activeTintColor: '#2BD9C8',
-            inactiveTintColor: '#AFAEAF',
-        }}
-        >
-            <Tab.Screen name="Shop" component={createProductStack} />
-            <Tab.Screen name="Cart" component={createCartStack} />
-            <Tab.Screen name="Search" component={createSearchStack} />
-            <Tab.Screen name="Contact" component={ContactScreen} />
-        </Tab.Navigator>
-    );
-
-}
-
-
-function IconWithBadge({ name, badgeCount, color, size }) {
-    return (
-        <View style={{ width: 24, height: 24, margin: 5 }}>
-        <Ionicons name={name} size={size} color={color} />
-        {badgeCount > 0 && (
-            <View
-            style={{
-                // On React Native < 0.57 overflow outside of parent will not work on Android, see https://git.io/fhLJ8
-                position: 'absolute',
-                right: -6,
-                top: -3,
-                backgroundColor: '#2BD9C8',
-                borderRadius: 6,
-                width: 12,
-                height: 12,
-                justifyContent: 'center',
-                alignItems: 'center',
-            }}
-            >
-            <Text style={{ color: 'white', fontSize: 10, fontWeight: 'bold' }}>
-                {badgeCount}
-            </Text>
-            </View>
-        )}
-        </View>
-    );
-}
-
-function CartIconWithBadge(props) {
-// You should pass down the badgeCount in some other ways like React Context API, Redux, MobX or event emitters.
-return <IconWithBadge {...props} badgeCount={global.cartGlobal.length} />;
-}
-
-
 
 function SignInScreen({ navigation }) {
     return (
@@ -393,16 +419,3 @@ function ListProductScreen({ route, navigation }) {
     );
 }
 
-
-/* <NavigationContainer>
-                <Stack.Navigator initialRouteName="Main">
-                    <Stack.Screen 
-                        name="Main" 
-                        component={Main} 
-                        options={{ title: 'Overview' }} 
-                    />
-                    <Stack.Screen name="Authentication" component={Authentication} />
-                    <Stack.Screen name="OrderHistory" component={OrderHistory} />
-                    <Stack.Screen name="ChangeInfo" component={ChangeInfo} />
-                </Stack.Navigator>
-            </NavigationContainer> */

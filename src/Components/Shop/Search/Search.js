@@ -6,8 +6,11 @@ import Header from '../../Header'
 import icBack from '../../../media/icon/icBack.png'
 import picSp from '../../../media/img/sp1.jpg'
 
+//redux
+import { connect } from 'react-redux';
+import * as actions from '../../../actions';
 
-export default class Search extends Component {
+class Search extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -67,38 +70,67 @@ export default class Search extends Component {
     openMenu() {
         this.props.navigation.navigate("Cart");
     }
+
+    handleIncrease = () => {
+        this.props.counterIncrease();
+    }
+
+
+    handleDecrease = () => {
+        this.props.counterDecrease();
+    }
+
+
     render() {
         return (
             <View style={styles.wrapper}>
-                <Header openMenu={this.openMenu.bind(this)} navigation={this.props.navigation} />
-                    <FlatList
-                        data={this.state.data}
-                        renderItem={({item}) => 
-                        <View style={styles.list}>
-                            <Image source={item.img} style={styles.imgList}/>
-                            <View style={{justifyContent: 'space-between', paddingLeft: 20}}>
-                                <Text style={styles.textName}>{item.name}</Text>
-                                <Text style={styles.textPrice}>{item.price}</Text>
-                                <Text>Material {item.material}</Text>
-                                <View style={styles.detailInfo}>  
-                                    <Text>Color {item.color}</Text>
-                                    <View style={{backgroundColor: 'pink', height: 16, width: 16, borderRadius: 8, marginLeft: 5}} />
-                                    <TouchableOpacity 
-                                        style={styles.detailBtn}
-                                        onPress={()=>this.props.navigation.navigate('Detail')}
-                                    >
-                                        <Text style={styles.textBtn}>SHOW DETAILS</Text>
-                                    </TouchableOpacity>
-                                </View>
+                {/* <Header openMenu={this.openMenu.bind(this)} navigation={this.props.navigation} />
+                <FlatList
+                    data={this.state.data}
+                    renderItem={({item}) => 
+                    <View style={styles.list}>
+                        <Image source={item.img} style={styles.imgList}/>
+                        <View style={{justifyContent: 'space-between', paddingLeft: 20}}>
+                            <Text style={styles.textName}>{item.name}</Text>
+                            <Text style={styles.textPrice}>{item.price}</Text>
+                            <Text>Material {item.material}</Text>
+                            <View style={styles.detailInfo}>  
+                                <Text>Color {item.color}</Text>
+                                <View style={{backgroundColor: 'pink', height: 16, width: 16, borderRadius: 8, marginLeft: 5}} />
+                                <TouchableOpacity 
+                                    style={styles.detailBtn}
+                                    onPress={()=>this.props.navigation.navigate('Detail')}
+                                >
+                                    <Text style={styles.textBtn}>SHOW DETAILS</Text>
+                                </TouchableOpacity>
                             </View>
-
                         </View>
-                        }
-                    />
+
+                    </View>
+                    }
+                /> */}
+                <TouchableOpacity
+                    onPress={()=>this.handleIncrease()}
+                >
+                    <Text style={{fontSize: 20}}>Cong</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress = {()=>this.handleDecrease()}
+                >
+                    <Text style={{fontSize: 20}}>Tru</Text>
+                </TouchableOpacity>
+                <Text style={{fontSize: 20}}>{this.props.counter}</Text>
                 </View>
         );
     }
 }
+
+const mapStateToProps = state => ({
+    counter: state.counter
+})
+
+
+export default connect(mapStateToProps, actions)(Search);
 
 const styles = StyleSheet.create({
     wrapper: {

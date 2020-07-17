@@ -1,9 +1,12 @@
 import React from 'react';
 import { } from 'react-native';
-import Index from './Components/Index';
+import Index from './src/Components/Index';
 import {decode, encode} from 'base-64'
 import { YellowBox } from 'react-native';
 import _ from 'lodash';
+
+import {Provider} from 'react-redux';
+import store from './src/store';
 
 YellowBox.ignoreWarnings(['Setting a timer']);
 const _console = _.clone(console);
@@ -19,6 +22,8 @@ if (!global.atob) { global.atob = decode }
 
 export default function App() {
   return (
-    <Index />
+    <Provider store = {store}>
+      <Index />
+    </Provider>
   );
 }

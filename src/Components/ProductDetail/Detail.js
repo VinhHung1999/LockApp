@@ -6,16 +6,20 @@ import {firebaseApp} from '../FirebaseConfig.js';
 import global from '../global.js';
 
 
-import Header from '../Header'
+import Header from '../Header';
 
-import icBack from '../../media/icon/icBackBlue.png'
-import picSp from '../../media/img/sp1.jpg'
+import icBack from '../../media/icon/icBackBlue.png';
+import picSp from '../../media/img/sp1.jpg';
+
+//Redux
+import { connect } from 'react-redux';
+import * as actions from '../../actions';
 
 
 const { height, width } = Dimensions.get('window');
 
 
-export default class Detail extends Component {
+class Detail extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -34,7 +38,7 @@ export default class Detail extends Component {
     }
 
     addThisProductToCart() {
-        global.addProductToCart(this.props.id);
+            this.props.counterIncrease(this.props.id);
     }
     render() {
         return (
@@ -48,7 +52,10 @@ export default class Detail extends Component {
                             <Image source={icBack} style={styles.icon}/>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            onPress={()=>this.addThisProductToCart()}
+                            onPress={()=>setTimeout(() => {
+                                this.props.counterIncrease(this.props.id);
+                            }, 3000)
+                        }
                         >
                             <Ionicons name="md-cart" color='#2BD9C8' size={40} />
                         </TouchableOpacity>
@@ -81,7 +88,6 @@ export default class Detail extends Component {
         //const [loading, setLoading] = useState(true);
         const component=this;
         var db = firebaseApp.firestore();
-        var storage = firebaseApp.storage();
 
         db.collection("Products").doc(this.props.id).get().then(function(doc) {
             if (doc.exists) {
@@ -113,6 +119,14 @@ export default class Detail extends Component {
         
 }
 }
+
+
+const mapStateToProps = state => ({
+    counter: state.counter
+})
+
+
+export default connect(mapStateToProps, actions)(Detail);
 
 const styles = StyleSheet.create({
     wrapper: {

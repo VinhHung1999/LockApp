@@ -23,7 +23,7 @@ export default class Shop extends Component {
         return (
             <View  style={styles.wrapper}>
                 <Header openMenu={this.openMenu.bind(this)} />
-                <Product navigation={this.props.navigation}/>
+                <Product navigation={this.props.navigation} />
             </View>
         );
     }

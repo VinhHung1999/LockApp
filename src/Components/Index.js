@@ -30,6 +30,7 @@ import { IsLogin } from './DrawerContent/IsLogin';
 import { NotLogin } from './DrawerContent/NotLogin';
 
 import {firebaseApp} from './FirebaseConfig.js';
+import { connect } from 'react-redux';
 
 
 
@@ -46,7 +47,7 @@ const ProfileStack = createStackNavigator();
 const OrderStack = createStackNavigator();
 
 
-export default class Index extends Component {
+class Index extends Component {
     _isMounted=false;
     constructor(props){
         super(props);
@@ -58,6 +59,7 @@ export default class Index extends Component {
         global.clearCart = this.clearCart.bind(this);
         global.cartGlobal = this.state.cartArray;
     }
+
 
     Home() {
         return (
@@ -419,3 +421,10 @@ function ListProductScreen({ route, navigation }) {
     );
 }
 
+
+
+const mapStateToProps = state => ({
+    counter:state.counter
+})
+
+export default connect(mapStateToProps, null)(Index);

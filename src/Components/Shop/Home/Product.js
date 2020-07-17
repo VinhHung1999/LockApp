@@ -48,7 +48,7 @@ export default class Product extends Component {
                                 <Text style={productPrice}>{item.price}VND</Text>
                             </TouchableOpacity>
                     }
-                /> 
+                />
             </View>
         )
     }
@@ -58,7 +58,6 @@ export default class Product extends Component {
         //const [loading, setLoading] = useState(true);
         const component=this;
         var db = firebaseApp.firestore();
-        var storage = firebaseApp.storage();
         
         db.collection("Products").get().then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {

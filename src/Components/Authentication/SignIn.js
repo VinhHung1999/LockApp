@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button, Alert } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import {firebaseApp} from '../FirebaseConfig.js';
-import 'firebase/firestore';
+
 
 
 export default class SignIn extends Component{

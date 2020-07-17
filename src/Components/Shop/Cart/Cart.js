@@ -9,8 +9,12 @@ import Header from '../../Header';
 import global from '../../global.js';
 
 
+//Redux
+import { connect } from 'react-redux';
 
-export default class Cart extends Component {
+
+
+class Cart extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -25,53 +29,15 @@ export default class Cart extends Component {
 
     // Load new Data to cart
     loadNewData(){
-        this.setState({
-            refreshing:true,
-            
-        })
-        let items = [];
-
-        const component=this;
-        const db = firebaseApp.firestore();
-
-
-        global.cartGlobal.map(product=>{
-            db.collection("Products").doc(product).get().then(doc => {
-                let checkExist = false;
-                
-                for(var i = 0; i<items.length;i++){
-                    if(items[i].id==product){
-                        items[i].size= items[i].size +1;
-                        component.setState({
-                            data: items
-                        })
-                        checkExist=true;
-                    }
-                }
-                if(checkExist == false){
-                    var tempOJ = new Object();
-                    tempOJ=doc.data();
-                    tempOJ.size= 1;
-                    items.push(tempOJ);
-                    component.setState({
-                        data:items
-                })
-                }
-                //Sum total cost
-                let total= 0;
-                for(var i = 0; i<items.length;i++){
-                    total+=items[i].price*items[i].size;
-                }
-
-                component.setState({
-                    total: total
-                })
-            });
-        });
-        this.setState({
-            refreshing: false
-        });
         
+        let total= 0;
+        for(var i = 0; i<this.props.counter.length;i++){
+            total+=this.props.counter[i].price*this.props.counter[i].size;
+        }
+
+        this.setState({
+            total: total
+        })
     }
 
 
@@ -98,7 +64,7 @@ export default class Cart extends Component {
         const ID = this.generateID();
         const db = firebaseApp.firestore();
         const user = firebaseApp.auth().currentUser;
-        this.state.data.map(product => {
+        this.props.counter.map(product => {
             db.collection("Users").doc(user.uid).collection("Orders").doc(ID).collection("OrderDetails").doc(product.id).set({
                 size: product.size,
                 id: product.id,
@@ -140,7 +106,7 @@ export default class Cart extends Component {
             <View style={styles.wrapper}>
                 <Header openMenu={this.openMenu.bind(this)} />
                 <FlatList
-                    data={this.state.data}
+                    data={this.props.counter}
                     renderItem={({item}) => 
                     <View style={styles.list}>
                         <Image source={{uri: item.img}} style={styles.imgList}/>
@@ -189,48 +155,54 @@ export default class Cart extends Component {
         );
     }
     componentDidMount(){
-        let items = [];
+        // let items = [];
 
-        const component=this;
-        var db = firebaseApp.firestore();
+        // const component=this;
+        // var db = firebaseApp.firestore();
         
-        global.cartGlobal.map(product=>{
-            db.collection("Products").doc(product).get().then(doc => {
-                let checkExist = false;
+        // this.props.counter.map(product=>{
+        //     db.collection("Products").doc(product).get().then(doc => {
+        //         let checkExist = false;
                 
-                for(var i = 0; i<items.length;i++){
-                    if(items[i].id==product){
-                        items[i].size= items[i].size +1;
-                        component.setState({
-                            data: items
-                        })
-                        checkExist=true;
-                    }
-                }
-                if(checkExist == false){
-                    var tempOJ = new Object();
-                    tempOJ=doc.data();
-                    tempOJ.size= 1;
-                    items.push(tempOJ);
-                    component.setState({
-                        data:items
-                })
-                }
-                //Sum total cost
-                let total= 0;
-                for(var i = 0; i<items.length;i++){
-                    total+=items[i].price*items[i].size;
-                }
-
-                component.setState({
-                    total: total
-                })
-            });
-        })
+        //         for(var i = 0; i<items.length;i++){
+        //             if(items[i].id==product){
+        //                 items[i].size= items[i].size +1;
+        //                 component.setState({
+        //                     data: items
+        //                 })
+        //                 checkExist=true;
+        //             }
+        //         }
+        //         if(checkExist == false){
+        //             var tempOJ = new Object();
+        //             tempOJ=doc.data();
+        //             tempOJ.size= 1;
+        //             items.push(tempOJ);
+        //             component.setState({
+        //                 data:items
+        //         })
+        //         }
+                
+        //     });
+        // })
         
+        //Sum total cost
+        let total= 0;
+        for(var i = 0; i<this.props.counter.length;i++){
+            total+=this.props.counter[i].price*this.props.counter[i].size;
+        }
 
+        this.setState({
+            total: total
+        })
     }
 }
+
+const mapStateToProp = state => ({
+    counter: state.counter
+})
+
+export default connect(mapStateToProp, null)(Cart);
 
 const styles = StyleSheet.create({
     wrapper: {

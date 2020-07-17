@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import { StatusBar, AsyncStorage, View, Text } from 'react-native';
+import { StatusBar, AsyncStorage, View, Text, RefreshControl } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -31,6 +31,9 @@ import { NotLogin } from './DrawerContent/NotLogin';
 
 import {firebaseApp} from './FirebaseConfig.js';
 import { connect } from 'react-redux';
+import store from '../store';
+import { withSafeAreaInsets } from 'react-native-safe-area-context';
+
 
 
 
@@ -45,6 +48,7 @@ const CartStack = createStackNavigator();
 const SearchStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const OrderStack = createStackNavigator();
+
 
 
 class Index extends Component {
@@ -74,13 +78,10 @@ class Index extends Component {
                 } else if (route.name === 'Cart') {
                     return (
                         <CartIconWithBadge
-                        name={
-                            focused
-                            ? 'md-cart'
-                            : 'md-cart'
-                        }
+                        name={'md-cart'}
                         size={size}
                         color={color}
+                        
                         />
                     );
                 } else if (route.name === 'Search') {
@@ -105,6 +106,7 @@ class Index extends Component {
         );
     
     }
+    
     
     render() {
         return (
@@ -189,6 +191,12 @@ class Index extends Component {
 
 // Badge to Icon
 
+
+store.subscribe(() =>{
+
+});
+
+
 function IconWithBadge({ name, badgeCount, color, size }) {
     return (
         <View style={{ width: 24, height: 24, margin: 5 }}>
@@ -219,7 +227,7 @@ function IconWithBadge({ name, badgeCount, color, size }) {
 
 function CartIconWithBadge(props) {
 // You should pass down the badgeCount in some other ways like React Context API, Redux, MobX or event emitters.
-return <IconWithBadge {...props} badgeCount={global.cartGlobal.length}/>;
+return <IconWithBadge {...props} badgeCount={store.getState().counter.length} />;
 }
 
 
@@ -236,15 +244,41 @@ function Home() {
                 : 'ios-home';
             } else if (route.name === 'Cart') {
                 return (
-                    <CartIconWithBadge
-                    name={
-                        focused
-                        ? 'md-cart'
-                        : 'md-cart'
-                    }
-                    size={size}
-                    color={color}
-                    />
+                    // <CartIconWithBadge
+                    // name={
+                    //     focused
+                    //     ? 'md-cart'
+                    //     : 'md-cart'
+                    // }
+                    // size={size}
+                    // color={color}
+                    // />
+                    
+
+                    <View style={{ width: 24, height: 24, margin: 5 }}>
+                    <Ionicons name={name} size={size} color={color} />
+                    {store.getState().counter.length > 0 && (
+                        <View
+                        style={{
+                            // On React Native < 0.57 overflow outside of parent will not work on Android, see https://git.io/fhLJ8
+                            position: 'absolute',
+                            right: -6,
+                            top: -3,
+                            backgroundColor: '#2BD9C8',
+                            borderRadius: 6,
+                            width: 12,
+                            height: 12,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                        >
+                        <Text style={{ color: 'white', fontSize: 10, fontWeight: 'bold' }}>
+                            {store.getState().counter.length}
+                        </Text>
+                        </View>
+                    )}
+                    </View>
+                    
                 );
             } else if (route.name === 'Search') {
                 iconName = focused ? 'md-search' : 'md-search';

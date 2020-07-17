@@ -11,7 +11,7 @@ import global from '../../global.js';
 
 //Redux
 import { connect } from 'react-redux';
-
+import * as actions from '../../../actions'
 
 
 class Cart extends Component {
@@ -29,15 +29,7 @@ class Cart extends Component {
 
     // Load new Data to cart
     loadNewData(){
-        
-        let total= 0;
-        for(var i = 0; i<this.props.counter.length;i++){
-            total+=this.props.counter[i].price*this.props.counter[i].size;
-        }
-
-        this.setState({
-            total: total
-        })
+        this.componentDidMount();
     }
 
 
@@ -64,7 +56,7 @@ class Cart extends Component {
         const ID = this.generateID();
         const db = firebaseApp.firestore();
         const user = firebaseApp.auth().currentUser;
-        this.props.counter.map(product => {
+        this.state.data.map(product => {
             db.collection("Users").doc(user.uid).collection("Orders").doc(ID).collection("OrderDetails").doc(product.id).set({
                 size: product.size,
                 id: product.id,
@@ -83,8 +75,9 @@ class Cart extends Component {
 
 
 
+        this.props.counterClear();
 
-        global.clearCart();
+
         this.setState({
             data: [],
             total: 0
@@ -106,14 +99,24 @@ class Cart extends Component {
             <View style={styles.wrapper}>
                 <Header openMenu={this.openMenu.bind(this)} />
                 <FlatList
-                    data={this.props.counter}
+                    data={this.state.data}
+                    extraData={this.state}
+                    // onPress = {()=>{
+                    //     this.setState({
+                    //         refreshing: !this.state.refreshing
+                    //     })
+                    // }}
                     renderItem={({item}) => 
                     <View style={styles.list}>
                         <Image source={{uri: item.img}} style={styles.imgList}/>
                         <View style={{justifyContent: 'space-between', paddingLeft: 20, width: 240}}>
                             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                                 <Text style={styles.textName}>{item.name}</Text>
-                                <TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={()=>{
+                                        this.props.counterDelete(item.id)
+                                    }}
+                                >
                                     <Text style={styles.textName}>X</Text>
                                 </TouchableOpacity>
                             </View>
@@ -155,46 +158,51 @@ class Cart extends Component {
         );
     }
     componentDidMount(){
-        // let items = [];
+        let items = [];
 
-        // const component=this;
-        // var db = firebaseApp.firestore();
-        
-        // this.props.counter.map(product=>{
-        //     db.collection("Products").doc(product).get().then(doc => {
-        //         let checkExist = false;
+        const component=this;
+        var db = firebaseApp.firestore();
+        this.props.counter.map(product=>{
+            db.collection("Products").doc(product).get().then(doc => {
+                let checkExist = false;
                 
-        //         for(var i = 0; i<items.length;i++){
-        //             if(items[i].id==product){
-        //                 items[i].size= items[i].size +1;
-        //                 component.setState({
-        //                     data: items
-        //                 })
-        //                 checkExist=true;
-        //             }
-        //         }
-        //         if(checkExist == false){
-        //             var tempOJ = new Object();
-        //             tempOJ=doc.data();
-        //             tempOJ.size= 1;
-        //             items.push(tempOJ);
-        //             component.setState({
-        //                 data:items
-        //         })
-        //         }
+                for(var i = 0; i<items.length;i++){
+                    if(items[i].id==product){
+                        items[i].size= items[i].size +1;
+                        component.setState({
+                            data: items
+                        })
+                        checkExist=true;
+                    }
+                }
+                if(checkExist == false){
+                    var tempOJ = new Object();
+                    tempOJ=doc.data();
+                    tempOJ.size= 1;
+                    items.push(tempOJ);
+                    component.setState({
+                        data:items
+                })
+                }
+
+                this.setState({
+                    data:items
+                })
+
+                let total= 0;
+                for(var i = 0; i<items.length;i++){
+                    total+=items[i].price*items[i].size;
+                }
+
+                this.setState({
+                    total: total
+                })
                 
-        //     });
-        // })
+            });
+        })
         
         //Sum total cost
-        let total= 0;
-        for(var i = 0; i<this.props.counter.length;i++){
-            total+=this.props.counter[i].price*this.props.counter[i].size;
-        }
-
-        this.setState({
-            total: total
-        })
+        
     }
 }
 
@@ -202,7 +210,7 @@ const mapStateToProp = state => ({
     counter: state.counter
 })
 
-export default connect(mapStateToProp, null)(Cart);
+export default connect(mapStateToProp, actions)(Cart);
 
 const styles = StyleSheet.create({
     wrapper: {

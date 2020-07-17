@@ -84,7 +84,7 @@ class Search extends Component {
     render() {
         return (
             <View style={styles.wrapper}>
-                {/* <Header openMenu={this.openMenu.bind(this)} navigation={this.props.navigation} />
+                <Header openMenu={this.openMenu.bind(this)} navigation={this.props.navigation} />
                 <FlatList
                     data={this.state.data}
                     renderItem={({item}) => 
@@ -108,18 +108,8 @@ class Search extends Component {
 
                     </View>
                     }
-                /> */}
-                <TouchableOpacity
-                    onPress={()=>this.handleIncrease()}
-                >
-                    <Text style={{fontSize: 20}}>Cong</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress = {()=>this.handleDecrease()}
-                >
-                    <Text style={{fontSize: 20}}>Tru</Text>
-                </TouchableOpacity>
-                <Text style={{fontSize: 20}}>{this.props.counter}</Text>
+                />
+                
                 </View>
         );
     }

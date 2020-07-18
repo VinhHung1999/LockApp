@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, StyleSheet, Image, Dimensions } from 'react-native';
-import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
+import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons'; 
 
 import Header from '../../Header'
@@ -69,7 +69,7 @@ export default class Contact extends Component {
     }
     render() {
         return (
-            <View style={styles.wrapper}>
+            <ScrollView style={styles.wrapper}>
                 <Header navigation={this.props.navigation} />
                 <View style={styles.list}>
                     <Image source={picMap} style={{width: width - 40, height: height /3}}/>
@@ -93,7 +93,7 @@ export default class Contact extends Component {
                         <Text style={{color: '#FF0070'}}>(+84) 0908144880</Text>
                     </View>
                 </View>
-            </View>
+            </ScrollView>
         );
     }
 }

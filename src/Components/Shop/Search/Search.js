@@ -85,7 +85,12 @@ class Search extends Component {
                 <FlatList
                     data={this.state.data}
                     renderItem={({item}) => 
-                    <View style={styles.list}>
+                    <TouchableOpacity 
+                        style={styles.list}
+                        onPress={()=>this.props.navigation.navigate('Detail',{
+                            id: "VTVN"
+                        })}
+                    >
                         <Image source={item.img} style={styles.imgList}/>
                         <View style={{justifyContent: 'space-between', paddingLeft: 20}}>
                             <Text style={styles.textName}>{item.name}</Text>
@@ -94,16 +99,10 @@ class Search extends Component {
                             <View style={styles.detailInfo}>  
                                 <Text>Color {item.color}</Text>
                                 <View style={{backgroundColor: 'pink', height: 16, width: 16, borderRadius: 8, marginLeft: 5}} />
-                                <TouchableOpacity 
-                                    style={styles.detailBtn}
-                                    onPress={()=>this.props.navigation.navigate('Detail')}
-                                >
-                                    <Text style={styles.textBtn}>SHOW DETAILS</Text>
-                                </TouchableOpacity>
                             </View>
                         </View>
 
-                    </View>
+                    </TouchableOpacity>
                     }
                 />
                 

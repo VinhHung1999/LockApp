@@ -34,7 +34,12 @@ export default class ListProduct extends Component {
                     <FlatList
                         data={this.state.data}
                         renderItem={({item}) => 
-                        <View style={styles.list}>
+                        <TouchableOpacity 
+                            style={styles.list}
+                            onPress={()=>this.props.navigation.navigate('Detail',{
+                                id:item.id
+                            })}
+                        >
                             <Image source={{uri: item.img}} style={styles.imgList}/>
                             <View style={{justifyContent: 'space-between', paddingLeft: 20}}>
                                 <Text style={styles.textName}>{item.name}</Text>
@@ -42,18 +47,10 @@ export default class ListProduct extends Component {
                                 <Text>Material {item.material}</Text>
                                 <View style={styles.detailInfo}>  
                                     <Text>Color {item.color}</Text>
-                                    <View style={{backgroundColor: item.color, height: 16, width: 16, borderRadius: 8, marginLeft: 50}} />
-                                    <TouchableOpacity 
-                                        style={styles.detailBtn}
-                                        onPress={()=>this.props.navigation.navigate('Detail',{
-                                            id:item.id
-                                        })}
-                                    >
-                                        <Text style={styles.textBtn}>SHOW DETAILS</Text>
-                                    </TouchableOpacity>
+                                    <View style={{backgroundColor: item.color, height: 16, width: 16, borderRadius: 8, marginLeft: 10}} />
                                 </View>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                         }
                     />
                 </View>

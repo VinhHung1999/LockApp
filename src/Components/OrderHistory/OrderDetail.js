@@ -37,7 +37,12 @@ export default class OrderDetails extends Component {
                 <FlatList
                     data={this.state.data}
                     renderItem={({item}) => 
-                    <View style={styles.list}>
+                    <TouchableOpacity 
+                        style={styles.list}
+                        onPress={()=>this.props.navigation.navigate('Detail',{
+                            id: item.id
+                        })}
+                    >
                         <Image source={{uri: item.img}} style={styles.imgList}/>
                         <View style={{justifyContent: 'space-between', paddingLeft: 20, width: 240}}>
                             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -49,18 +54,10 @@ export default class OrderDetails extends Component {
                                 
                                 <Text style={{color: '#AFAEAF', fontWeight: 'bold'}}>Amount: {item.size}</Text>
                                 
-                                <TouchableOpacity 
-                                    style={styles.detailBtn}
-                                    onPress={()=>this.props.navigation.navigate('Detail',{
-                                        id: item.id
-                                    })}
-                                >
-                                    <Text style={styles.textBtn}>SHOW DETAILS</Text>
-                                </TouchableOpacity>
                             </View>
                         </View>
 
-                    </View>
+                    </TouchableOpacity>
                     }
                 />
                 <View style={styles.totalPrice}

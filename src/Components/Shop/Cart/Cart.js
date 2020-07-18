@@ -3,10 +3,10 @@ import { View, Text, FlatList, StyleSheet, Image, RefreshControl, Alert } from '
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import {firebaseApp} from '../../FirebaseConfig.js';
+import Ionicons from 'react-native-vector-icons/Ionicons'; 
 
 import Header from '../../Header';
 
-import global from '../../global.js';
 
 
 //Redux
@@ -148,15 +148,25 @@ class Cart extends Component {
                 <FlatList
                     data={this.props.counter}
                     renderItem={({item}) => 
-                    <View style={styles.list}>
+                    <View 
+                        style={styles.list}
+                        
+                    >
                         <Image source={{uri: item.img}} style={styles.imgList}/>
                         <View style={{justifyContent: 'space-between', paddingLeft: 20, width: 240}}>
                             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                                <Text style={styles.textName}>{item.name}</Text>
+                                <TouchableOpacity
+                                    onPress={()=>this.props.navigation.navigate('Detail',{
+                                        id: item.id
+                                    })}
+                                >
+                                    <Text style={styles.textName}>{item.name}</Text>
+                                </TouchableOpacity>
+                                
                                 <TouchableOpacity
                                     onPress={()=>this.props.counterDelete(item.id)}
                                 >
-                                    <Text style={styles.textName}>X</Text>
+                                    <Ionicons name="ios-close-circle" size= {25} color='red'/>
                                 </TouchableOpacity>
                             </View>
                             <Text style={styles.textPrice}>{item.price}</Text>
@@ -164,22 +174,19 @@ class Cart extends Component {
                                 <TouchableOpacity
                                     onPress={()=>this.props.counterDecrease(item.id)}
                                 >
-                                    <Text>-</Text>
+                                    <View style={{backgroundColor: '#2BD9C8', width: 25, height: 25, borderRadius: 12.5, alignItems:'center', justifyContent: "center" }}>
+                                        <Text style={{color: 'white', fontSize: 30, fontWeight: 'bold'}}>-</Text>
+                                    </View>
                                 </TouchableOpacity>
-                                <Text>{item.size}</Text>
+                                <Text style={{fontSize: 20, fontWeight:'bold'}}>{item.size}</Text>
                                 <TouchableOpacity
                                     onPress={()=>this.props.counterIncrease(item.id)}
                                 >
-                                    <Text>+</Text>
+                                    <View style={{backgroundColor: '#2BD9C8', width: 25, height: 25, borderRadius: 12.5, alignItems:'center', justifyContent: "center" }}>
+                                        <Text style={{color: 'white', fontSize: 20}}>+</Text>
+                                    </View>
                                 </TouchableOpacity>
-                                <TouchableOpacity 
-                                    style={styles.detailBtn}
-                                    onPress={()=>this.props.navigation.navigate('Detail',{
-                                        id: item.id
-                                    })}
-                                >
-                                    <Text style={styles.textBtn}>SHOW DETAILS</Text>
-                                </TouchableOpacity>
+                                
                             </View>
                         </View>
 
@@ -239,14 +246,17 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     textName: {
-        fontSize: 20, color:'#AFAEAF'
+        fontSize: 20, color:'#AFAEAF',
+        fontWeight: 'bold'
     },
     textPrice: {
         color:'#FF1FA3', fontWeight:'bold', fontSize: 20
     },
     detailInfo: {
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-around',
+        marginLeft: -15,
+        paddingRight: 70
     },
     detailBtn: {
         

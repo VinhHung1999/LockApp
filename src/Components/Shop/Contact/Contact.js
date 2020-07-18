@@ -67,13 +67,10 @@ export default class Contact extends Component {
             ]
         }
     }
-    openMenu() {
-        this.props.navigation.openDrawer();
-    }
     render() {
         return (
             <View style={styles.wrapper}>
-                <Header openMenu={this.openMenu.bind(this)} />
+                <Header navigation={this.props.navigation} />
                 <View style={styles.list}>
                     <Image source={picMap} style={{width: width - 40, height: height /3}}/>
                     

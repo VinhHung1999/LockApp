@@ -12,7 +12,7 @@ export default class Header extends Component {
             <View style={styles.wrapper}>
                 <View style={styles.row1}>
                     <TouchableOpacity
-                    onPress={this.props.openMenu}
+                    onPress={()=>this.props.navigation.openDrawer()}
                     >
                         <Image 
                             source={icMenu}
@@ -30,7 +30,8 @@ export default class Header extends Component {
                 <TextInput 
                     style={styles.textInput} 
                     placeholder="What do you want to buy ?"
-                    onBlur={()=>this.props.navigation.navigate("Search")}
+                    onEndEditing={()=>this.props.navigation.navigate("Search")}
+                    
                 />
             </View>
         );

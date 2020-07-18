@@ -11,14 +11,14 @@ import global from '../../global.js';
 
 //Redux
 import { connect } from 'react-redux';
-import * as actions from '../../../actions'
+import * as actions from '../../../actions';
+
 
 
 class Cart extends Component {
     constructor(props){
         super(props);
         this.state = {
-            data:[],
             refreshing:false,
             total: 0
         }
@@ -29,7 +29,15 @@ class Cart extends Component {
 
     // Load new Data to cart
     loadNewData(){
-        this.componentDidMount();
+        
+        let total= 0;
+        for(var i = 0; i<this.props.counter.length;i++){
+            total+=this.props.counter[i].price*this.props.counter[i].size;
+        }
+
+        this.setState({
+            total: total
+        })
     }
 
 
@@ -56,56 +64,89 @@ class Cart extends Component {
         const ID = this.generateID();
         const db = firebaseApp.firestore();
         const user = firebaseApp.auth().currentUser;
-        this.state.data.map(product => {
-            db.collection("Users").doc(user.uid).collection("Orders").doc(ID).collection("OrderDetails").doc(product.id).set({
-                size: product.size,
-                id: product.id,
-                img: product.img,
-                price: product.price
-            });
-        });
-
-        const today = this.todate();
-        db.collection("Users").doc(user.uid).collection("Orders").doc(ID).set({
-            time: today,
-            status: "pending",
-            total: this.state.total,
-            id: ID
-        });
-
-
-
-        this.props.counterClear();
-
-
-        this.setState({
-            data: [],
-            total: 0
-        },()=>Alert.alert(
+        if(this.props.counter.length==0){
+            Alert.alert(
                 'Announcement',
-                'Order Successfully !!',
+                'Empty Cart !!',
                 [
-                { text: 'OK' }
+                { text: 'OK', onPress: () => this.props.navigation.navigate('Shop')}
                 ],
                 { cancelable: false }
             )
-        )
+        }
+        else if(user==null){
+            Alert.alert(
+                'Announcement',
+                'You must Login First !!',
+                [
+                { text: 'OK', onPress: () => this.props.navigation.navigate('SignIn')}
+                ],
+                { cancelable: false }
+            )
+        }
+        else
+        {
+            this.props.counter.map(product => {
+                db.collection("Users").doc(user.uid).collection("Orders").doc(ID).collection("OrderDetails").doc(product.id).set({
+                    size: product.size,
+                    id: product.id,
+                    img: product.img,
+                    price: product.price
+                });
+            });
+
+            const today = this.todate();
+            db.collection("Users").doc(user.uid).collection("Orders").doc(ID).set({
+                time: today,
+                status: "pending",
+                total: this.state.total,
+                id: ID
+            });
+
+
+            //clear store
+            this.props.counterClear();
+
+            this.setState({
+                total: 0
+            },()=>Alert.alert(
+                    'Announcement',
+                    'Order Successfully !!',
+                    [
+                    { text: 'OK' }
+                    ],
+                    { cancelable: false }
+                )
+            )
+        }
         
 
+    }
+
+    calTotal(){
+        let total= 0;
+        if(this.props.counter.length>0)
+        {
+            for(var i = 0; i<this.props.counter.length;i++){
+                total+=this.props.counter[i].price*this.props.counter[i].size;
+            }
+        }
+        else return 0;
+        
+
+        return total;
+    }
+
+    deleteItem(id){
+        this.props.counterDelete(id);
     }
 
     render() {
         return (
             <View style={styles.wrapper}>
-                <Header openMenu={this.openMenu.bind(this)} />
+                <Header navigation={this.props.navigation} />
                 <FlatList
-                    data={this.state.data}
-                    extraData={this.state}
-                    // onPress = {()=>{
-                    //     this.setState({
-                    //         refreshing: !this.state.refreshing
-                    //     })
-                    // }}
+                    data={this.props.counter}
                     renderItem={({item}) => 
                     <View style={styles.list}>
                         <Image source={{uri: item.img}} style={styles.imgList}/>
@@ -113,20 +154,22 @@ class Cart extends Component {
                             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                                 <Text style={styles.textName}>{item.name}</Text>
                                 <TouchableOpacity
-                                    onPress={()=>{
-                                        this.props.counterDelete(item.id)
-                                    }}
+                                    onPress={()=>this.props.counterDelete(item.id)}
                                 >
                                     <Text style={styles.textName}>X</Text>
                                 </TouchableOpacity>
                             </View>
                             <Text style={styles.textPrice}>{item.price}</Text>
                             <View style={styles.detailInfo}>  
-                                <TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={()=>this.props.counterDecrease(item.id)}
+                                >
                                     <Text>-</Text>
                                 </TouchableOpacity>
                                 <Text>{item.size}</Text>
-                                <TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={()=>this.props.counterIncrease(item.id)}
+                                >
                                     <Text>+</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity 
@@ -152,58 +195,12 @@ class Cart extends Component {
                 <TouchableOpacity style={styles.banner}
                     onPress={()=>this.makeOrder()}
                 >
-                    <Text style={{fontSize: 20, color: 'white'}}>TOTAL {this.state.total} VND CHECKOUT</Text>
+                    <Text style={{fontSize: 20, color: 'white'}}>TOTAL {this.calTotal()} VND CHECKOUT</Text>
                 </TouchableOpacity>
             </View>
         );
     }
-    componentDidMount(){
-        let items = [];
 
-        const component=this;
-        var db = firebaseApp.firestore();
-        this.props.counter.map(product=>{
-            db.collection("Products").doc(product).get().then(doc => {
-                let checkExist = false;
-                
-                for(var i = 0; i<items.length;i++){
-                    if(items[i].id==product){
-                        items[i].size= items[i].size +1;
-                        component.setState({
-                            data: items
-                        })
-                        checkExist=true;
-                    }
-                }
-                if(checkExist == false){
-                    var tempOJ = new Object();
-                    tempOJ=doc.data();
-                    tempOJ.size= 1;
-                    items.push(tempOJ);
-                    component.setState({
-                        data:items
-                })
-                }
-
-                this.setState({
-                    data:items
-                })
-
-                let total= 0;
-                for(var i = 0; i<items.length;i++){
-                    total+=items[i].price*items[i].size;
-                }
-
-                this.setState({
-                    total: total
-                })
-                
-            });
-        })
-        
-        //Sum total cost
-        
-    }
 }
 
 const mapStateToProp = state => ({

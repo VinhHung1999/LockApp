@@ -23,6 +23,7 @@ class Detail extends Component {
     constructor(props){
         super(props);
         this.state = {
+            id:"",
             name: "",
             price: 0,
             material: "",
@@ -32,18 +33,12 @@ class Detail extends Component {
             imgA: "empty"
         }
     }
-    openMenu() {
-        
-        this.props.navigation.openDrawer();
-    }
+   
 
-    addThisProductToCart() {
-            this.props.counterIncrease(this.props.id);
-    }
     render() {
         return (
             <View style={styles.wrapper}>
-                <Header openMenu={this.openMenu.bind(this)} />
+                <Header navigation={this.props.navigation} />
                 <ScrollView style={styles.container}>
                     <View style={styles.header}>
                         <TouchableOpacity
@@ -52,10 +47,10 @@ class Detail extends Component {
                             <Image source={icBack} style={styles.icon}/>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            onPress={()=>setTimeout(() => {
-                                this.props.counterIncrease(this.props.id);
-                            }, 3000)
-                        }
+                            // onPress={()=>setTimeout(() => {
+                            //     this.props.counterAdd(JSON.stringify(this.state));
+                            // }, 3000)
+                            onPress={()=>this.props.counterAdd(JSON.stringify(this.state))}
                         >
                             <Ionicons name="md-cart" color='#2BD9C8' size={40} />
                         </TouchableOpacity>
@@ -99,6 +94,7 @@ class Detail extends Component {
                 const { img } = doc.data();
                 const { imgA } = doc.data();
                 component.setState({
+                    id:component.props.id,
                     name: name,
                     price: price,
                     material: material,
@@ -107,6 +103,8 @@ class Detail extends Component {
                     img:img,
                     imgA:imgA
                 })
+                // console.log(component.state);
+
             } else {
                 // doc.data() will be undefined in this case
                 console.log("No such document!");
@@ -114,6 +112,7 @@ class Detail extends Component {
         }).catch(function(error) {
             console.log("Error getting document:", error);
         });
+
         
 
         

@@ -67,9 +67,6 @@ class Search extends Component {
             ]
         }
     }
-    openMenu() {
-        this.props.navigation.navigate("Cart");
-    }
 
     handleIncrease = () => {
         this.props.counterIncrease();
@@ -84,7 +81,7 @@ class Search extends Component {
     render() {
         return (
             <View style={styles.wrapper}>
-                <Header openMenu={this.openMenu.bind(this)} navigation={this.props.navigation} />
+                <Header navigation={this.props.navigation} />
                 <FlatList
                     data={this.state.data}
                     renderItem={({item}) => 

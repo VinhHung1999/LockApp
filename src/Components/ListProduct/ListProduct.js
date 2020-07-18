@@ -15,14 +15,11 @@ export default class ListProduct extends Component {
             data:[],
         }
     }
-    openMenu() {
-        this.props.navigation.openDrawer();
-    }
 
     render() {
         return (
             <View style={styles.wrapper}>
-                <Header openMenu={this.openMenu.bind(this)} />
+                <Header navigation={this.props.navigation} />
                 <View style={styles.container}>
                     <View style={styles.header}>
                         <TouchableOpacity

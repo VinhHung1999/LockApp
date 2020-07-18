@@ -1,7 +1,8 @@
-import {INCREASE, DECREASE, CLEAR, DELETE} from './types';
+import {ADD ,INCREASE, DECREASE, CLEAR, DELETE} from './types';
 
 
-export const counterIncrease = (newVal) => ({type:INCREASE, value: newVal});
-export const counterDecrease = () => ({type:DECREASE, value: 5});
+export const counterAdd = (newVal) => ({type:ADD, value: newVal});
+export const counterDecrease = (id) => ({type:DECREASE, value: id});
+export const counterIncrease = (id) => ({type:INCREASE, value: id});
 export const counterClear = () => ({type:CLEAR});
 export const counterDelete = (id) => ({type:DELETE, value: id});

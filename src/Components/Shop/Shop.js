@@ -16,13 +16,10 @@ export default class Shop extends Component {
             
         }
     }
-    openMenu() {
-        this.props.navigation.openDrawer();
-    }
     render() {
         return (
             <View  style={styles.wrapper}>
-                <Header openMenu={this.openMenu.bind(this)} />
+                <Header navigation={this.props.navigation}/>
                 <Product navigation={this.props.navigation} />
             </View>
         );

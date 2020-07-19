@@ -153,23 +153,15 @@ class Cart extends Component {
                         
                     >
                         <Image source={{uri: item.img}} style={styles.imgList}/>
-                        <View style={{justifyContent: 'space-between', paddingLeft: 20, width: 240}}>
-                            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                                <TouchableOpacity
-                                    onPress={()=>this.props.navigation.navigate('Detail',{
-                                        id: item.id
-                                    })}
-                                >
-                                    <Text style={styles.textName}>{item.name}</Text>
-                                </TouchableOpacity>
-                                
-                                <TouchableOpacity
-                                    onPress={()=>this.props.counterDelete(item.id)}
-                                >
-                                    <Ionicons name="ios-close-circle" size= {25} color='red'/>
-                                </TouchableOpacity>
-                            </View>
-                            <Text style={styles.textPrice}>{item.price}</Text>
+                        <View style={{justifyContent: 'space-between', paddingLeft: 10}}>
+                            <TouchableOpacity
+                                onPress={()=>this.props.navigation.navigate('Detail',{
+                                    id: item.id
+                                })}
+                            >
+                                <Text style={styles.textName}>{item.name}</Text>
+                            </TouchableOpacity>
+                            <Text style={styles.textPrice}>{item.price} $</Text>
                             <View style={styles.detailInfo}>  
                                 <TouchableOpacity
                                     onPress={()=>this.props.counterDecrease(item.id)}
@@ -189,6 +181,11 @@ class Cart extends Component {
                                 
                             </View>
                         </View>
+                        <TouchableOpacity
+                            onPress={()=>this.props.counterDelete(item.id)}
+                        >
+                            <Ionicons name="ios-close-circle" size= {25} color='red'/>
+                        </TouchableOpacity>
 
                     </View>
                     }
@@ -202,7 +199,7 @@ class Cart extends Component {
                 <TouchableOpacity style={styles.banner}
                     onPress={()=>this.makeOrder()}
                 >
-                    <Text style={{fontSize: 20, color: 'white'}}>TOTAL {this.calTotal()} VND CHECKOUT</Text>
+                    <Text style={{fontSize: 20, color: 'white'}}>TOTAL {this.calTotal()} $ CHECKOUT</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -239,11 +236,12 @@ const styles = StyleSheet.create({
     },
     list: {
         flexDirection: 'row',
-        margin: 10,
+        margin: 5,
         paddingTop: 20,
         backgroundColor: 'white',
         padding: 10,
-        borderRadius: 10
+        borderRadius: 10,
+        justifyContent: 'space-between'
     },
     textName: {
         fontSize: 20, color:'#AFAEAF',

@@ -33,9 +33,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: width - 20,
         padding: 10,
-        
-
-        
     },
     textStyle: {
         color: '#AFAEAF',

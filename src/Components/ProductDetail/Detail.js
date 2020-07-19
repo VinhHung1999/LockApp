@@ -60,7 +60,7 @@ class Detail extends Component {
                         <Image source={{uri:this.state.imgA}} style={styles.img}/>
                     </View>
                     <View style={styles.title}>
-        <Text style={{fontSize: 20, fontWeight: 'bold'}}>{this.state.name} /<Text style={{color: '#E4E4E4'}}> {this.state.price} VND</Text></Text>
+        <Text style={{fontSize: 20, fontWeight: 'bold'}}>{this.state.name} /<Text style={{color: '#E4E4E4'}}> {this.state.price} $</Text></Text>
                     </View>
                     <View style={styles.detail}>
                         <Text style={{color: 'gray'}}>{this.state.description}</Text>

@@ -55,7 +55,7 @@ export default class OrderHistory extends Component {
                             </View>
                             <View style={{justifyContent: 'space-between',flexDirection: 'row'}}>
                                 <Text style={styles.txt}>Total:</Text>
-                                <Text style={{color:'pink', fontWeight: 'bold'}}>{item.total}</Text>
+                                <Text style={{color:'pink', fontWeight: 'bold'}}>{item.total} $</Text>
                             </View>
                         </View>
                     </TouchableOpacity>

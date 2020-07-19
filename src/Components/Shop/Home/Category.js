@@ -55,17 +55,17 @@ export default class Category extends Component {
     }
 }
 
-const imgWidth = width-40;
+const imgWidth = width-30;
 const imgHeight = (imgWidth / 933) * 465;
 
 
 const styles = StyleSheet.create({
     wrapper: {
-        height: height * 0.3,
+        height: height * 0.37,
         backgroundColor: 'white',
         borderRadius: 10,
-        width: width - 20,
-        marginTop: 10,
+        width: width - 10,
+        marginTop: 5,
         marginBottom: 10,
         padding: 10
     },
@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     swiper: {
-        paddingTop: 20,
-        
+        paddingTop: 20
     }
 })

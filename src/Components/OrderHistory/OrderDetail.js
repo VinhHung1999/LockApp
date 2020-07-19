@@ -49,7 +49,7 @@ export default class OrderDetails extends Component {
                                 <Text style={styles.textName}>{item.id}</Text>
                                 
                             </View>
-                            <Text style={styles.textPrice}>{item.price} VND</Text>
+                            <Text style={styles.textPrice}>{item.price} $</Text>
                             <View style={styles.detailInfo}>  
                                 
                                 <Text style={{color: '#AFAEAF', fontWeight: 'bold'}}>Amount: {item.size}</Text>
@@ -63,7 +63,7 @@ export default class OrderDetails extends Component {
                 <View style={styles.totalPrice}
                     onPress={()=>this.makeOrder()}
                 >
-                    <Text style={{fontSize: 20, color: 'white'}}>TOTAL {this.state.total} VND</Text>
+                    <Text style={{fontSize: 20, color: 'white'}}>TOTAL {this.state.total} $</Text>
                 </View>
             </View>
         );

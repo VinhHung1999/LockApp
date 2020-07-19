@@ -26,7 +26,7 @@ export default class Product extends Component {
                 <FlatList
                         ListHeaderComponent={
                             <>
-                                <Collection navigation={this.props.navigation}/>
+                                {/* <Collection navigation={this.props.navigation}/> */}
                                 <Category navigation={this.props.navigation}/>
                                 <View style={titleContainer}>
                                     <Text style={title}>TOP PRODUCT</Text>
@@ -45,7 +45,7 @@ export default class Product extends Component {
                                 })}>
                                 <Image source={{uri: item.img}} style={productImage}></Image>
                                 <Text style={productName}>{item.name}</Text>
-                                <Text style={productPrice}>{item.price}VND</Text>
+                                <Text style={productPrice}>{item.price} $</Text>
                             </TouchableOpacity>
                     }
                 />
@@ -85,8 +85,7 @@ const productImageHeight= (productWidth / 450) * 675;
 const styles = StyleSheet.create({
     wrapper: {
         flex: 1,
-        margin: 10,
-        borderWidth: 0
+        margin: 5
 
     },
     titleContainer: {
@@ -95,7 +94,8 @@ const styles = StyleSheet.create({
         height: 50,
         padding: 10,
         borderRadius: 10,
-        width: width -20
+        width: width -10,
+        marginBottom: 5
     },
     title: {
         color: '#AFAEAF',
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
         borderWidth: 0,
         backgroundColor: 'white',
         borderRadius: 10,
-        margin: 5
+        margin: 7
 
     },
     productImage: {

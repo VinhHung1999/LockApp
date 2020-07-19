@@ -43,7 +43,7 @@ export default class ListProduct extends Component {
                             <Image source={{uri: item.img}} style={styles.imgList}/>
                             <View style={{justifyContent: 'space-between', paddingLeft: 20}}>
                                 <Text style={styles.textName}>{item.name}</Text>
-                                <Text style={styles.textPrice}>{item.price}</Text>
+                                <Text style={styles.textPrice}>{item.price} $</Text>
                                 <Text>Material {item.material}</Text>
                                 <View style={styles.detailInfo}>  
                                     <Text>Color {item.color}</Text>
